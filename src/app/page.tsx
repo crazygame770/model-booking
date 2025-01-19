@@ -1,101 +1,149 @@
-import Image from "next/image";
+'use client';
+
+import { useState, FormEvent } from 'react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [formData, setFormData] = useState({
+    name: '',
+    company: '',
+    email: '',
+    phone: '',
+    models: '',
+    hours: '',
+    eventPublic: '',
+    eventDescription: '',
+    date: '',
+    cityArea: '',
+    schedule: '',
+    details: ''
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log(formData);
+    // You can add API call logic here
+  };
+
+  return (
+    <main className="min-h-screen p-8 max-w-2xl mx-auto">
+      <h1 className="text-4xl font-bold text-center mb-6">BOOKING</h1>
+      
+      <p className="text-center mb-8 text-gray-700">
+        To booking or request a quote for our atmosphere models services in Miami, Las Vegas o New York, please fill out the following form and we will send a budget right now.
+      </p>
+      
+      <p className="text-center mb-8 text-gray-600">
+        We are available to answer your questions.
+      </p>
+
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          placeholder="Name"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.name}
+          onChange={(e) => setFormData({...formData, name: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="Company"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.company}
+          onChange={(e) => setFormData({...formData, company: e.target.value})}
+        />
+        
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.email}
+          onChange={(e) => setFormData({...formData, email: e.target.value})}
+        />
+        
+        <input
+          type="tel"
+          placeholder="Phone"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.phone}
+          onChange={(e) => setFormData({...formData, phone: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="How many models do you need?"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.models}
+          onChange={(e) => setFormData({...formData, models: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="How many hours?"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.hours}
+          onChange={(e) => setFormData({...formData, hours: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="Event Public or Private?"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.eventPublic}
+          onChange={(e) => setFormData({...formData, eventPublic: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="Event or Party description"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.eventDescription}
+          onChange={(e) => setFormData({...formData, eventDescription: e.target.value})}
+        />
+        
+        <input
+          type="date"
+          placeholder="Date"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.date}
+          onChange={(e) => setFormData({...formData, date: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="City/Area"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.cityArea}
+          onChange={(e) => setFormData({...formData, cityArea: e.target.value})}
+        />
+        
+        <input
+          type="text"
+          placeholder="Schedule"
+          className="w-full p-2 border border-gray-300 rounded"
+          value={formData.schedule}
+          onChange={(e) => setFormData({...formData, schedule: e.target.value})}
+        />
+        
+        <textarea
+          placeholder="Please provide more details"
+          className="w-full p-2 border border-gray-300 rounded h-32"
+          value={formData.details}
+          onChange={(e) => setFormData({...formData, details: e.target.value})}
+        />
+        
+        <button
+          type="submit"
+          className="w-full bg-black text-white py-3 px-4 rounded hover:bg-gray-800 transition-colors"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          SEND MESSAGE
+        </button>
+      </form>
+      
+      <div className="text-center mt-8 text-gray-700">
+        MIAMI - LAS VEGAS - NEW YORK
+      </div>
+    </main>
   );
 }
