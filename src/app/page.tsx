@@ -142,7 +142,7 @@ export default function Home() {
       </form>
       
       <div className="text-center mt-8 text-gray-700">
-        MIAMI - LAS VEGAS - NEW YORK
+        MIAMI
       </div>
     </main>
   );
