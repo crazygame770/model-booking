@@ -16,7 +16,7 @@ export default function Header() {
             height={48}
             className={styles.logoImage}
           />
-          <span>ModelBooking</span>
+          <span>EmployModels</span>
         </Link>
         <div className={styles.authLinks}>
           <Link href="/model/register" className={styles.link}>

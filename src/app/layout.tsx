@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ModelBooking - Professional Model Booking Platform",
+  title: "EmployModels - Professional Model Booking Platform",
   description: "Book professional models for your projects, events, and campaigns",
 };
 
