@@ -19,6 +19,9 @@ export default function Header() {
           <span>EmployModels</span>
         </Link>
         <div className={styles.authLinks}>
+          <Link href="/booking" className={styles.link}>
+            Book a Model
+          </Link>
           <Link href="/model/register" className={styles.link}>
             Model Register
           </Link>
