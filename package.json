@@ -3,12 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "npm run generate-data && next dev",
+    "build": "npm run generate-data && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-data": "node scripts/generate-boat-data.js"
   },
   "dependencies": {
+    "csv-parse": "^5.6.0",
+    "fs": "^0.0.1-security",
     "next": "15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

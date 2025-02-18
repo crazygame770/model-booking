@@ -1,98 +1,50 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import BoatDetailsModal from '@/components/BoatDetailsModal';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { BoatData } from '@/types/boat';
+import { readBoatData } from '@/utils/csvParser';
 
-interface Boat {
-  id: number;
-  name: string;
-  imageUrls: string[];
-  type: string;
-  length: string;
-  capacity: number;
-  price: number;
-  features: string[];
-  location: string;
-}
-
-// Seeded random number generator
-class SeededRandom {
-  private seed: number;
-
-  constructor(seed: number) {
-    this.seed = seed;
-  }
-
-  next(): number {
-    this.seed = (this.seed * 16807) % 2147483647;
-    return (this.seed - 1) / 2147483646;
-  }
-}
-
-const locations = [
-  'Miami Marina',
-  'Fort Lauderdale Marina',
-  'Palm Beach Marina',
-  'Key Biscayne Marina',
-  'Miami Beach Marina',
-  'Coconut Grove Marina'
-];
-
-const boatTypes = [
-  'Yacht',
-  'Sailboat',
-  'Catamaran',
-  'Motor Boat',
-  'Sport Fishing Boat',
-  'Speed Boat'
-];
-
-const features = [
-  'Air Conditioning',
-  'WiFi',
-  'Kitchen',
-  'Sound System',
-  'BBQ Grill',
-  'Jet Ski',
-  'Fishing Equipment',
-  'Snorkeling Gear',
-  'Water Toys',
-  'Sun Deck',
-  'Swimming Platform',
-  'Crew Included'
-];
-
-const BoatsPage = () => {
-  // Generate 100 mockup boats with consistent data using seed
-  const boats: Boat[] = useMemo(() => {
-    const random = new SeededRandom(98765); // Different seed from models and villas
-
-    return Array.from({ length: 100 }, (_, i) => {
-      const numFeatures = Math.floor(4 + random.next() * 5); // 4-8 features
-      const boatFeatures = new Set<string>();
-      while (boatFeatures.size < numFeatures) {
-        boatFeatures.add(features[Math.floor(random.next() * features.length)]);
-      }
-
-      const lengthFeet = Math.floor(30 + random.next() * 120); // 30-150 feet
-
-      return {
-        id: i + 1,
-        name: `${boatTypes[Math.floor(random.next() * boatTypes.length)]} ${i + 1}`,
-        imageUrls: ['', '', '', ''], // Placeholder for images
-        type: boatTypes[Math.floor(random.next() * boatTypes.length)],
-        length: `${lengthFeet} ft`,
-        capacity: Math.floor(4 + random.next() * 28), // 4-32 people
-        price: Math.floor(1000 + random.next() * 14000), // $1000-$15000 per day
-        features: Array.from(boatFeatures),
-        location: locations[Math.floor(random.next() * locations.length)]
-      };
-    });
-  }, []); // Empty dependency array ensures this only runs once
-
+export default function BoatsPage() {
+  const [selectedBoat, setSelectedBoat] = useState<BoatData | null>(null);
+  const [boats, setBoats] = useState<BoatData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedBoat, setSelectedBoat] = useState<Boat | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchBoats = async () => {
+      try {
+        const boatData = await readBoatData();
+        setBoats(boatData);
+        setError(null);
+      } catch (error) {
+        console.error('Error loading boat data:', error);
+        setError('Failed to load boat data. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBoats();
+  }, []);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-red-500 text-center">
+          <p className="text-xl font-semibold mb-2">Error</p>
+          <p>{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   const boatsPerPage = 10;
   const totalPages = Math.ceil(boats.length / boatsPerPage);
@@ -104,7 +56,7 @@ const BoatsPage = () => {
     return boats.slice(startIndex, endIndex);
   };
 
-  const openModal = (boat: Boat) => {
+  const openModal = (boat: BoatData) => {
     setSelectedBoat(boat);
     setIsModalOpen(true);
   };
@@ -116,52 +68,40 @@ const BoatsPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Luxury Boats</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">Our Luxury Boats</h1>
       
-      {/* Boats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {getCurrentPageBoats().map((boat) => (
           <div
             key={boat.id}
-            className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+            className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+            onClick={() => openModal(boat)}
           >
-            {/* Skeleton placeholder */}
-            <div
-              className="w-full h-48 bg-gray-200"
-              style={{
-                animation: 'skeleton 1.5s infinite linear'
-              }}
-            />
+            <div className="relative h-64">
+              <img
+                src={boat.imageUrl || '/placeholder-boat.jpg'}
+                alt={boat.name}
+                className="w-full h-full object-cover"
+              />
+            </div>
             <div className="p-4">
-              <h3 className="text-lg font-semibold mb-2">{boat.name}</h3>
-              <div className="text-sm text-gray-600 space-y-1">
-                <p>Type: {boat.type}</p>
-                <p>Length: {boat.length}</p>
-                <p>Capacity: {boat.capacity} people</p>
-                <p>Location: {boat.location}</p>
-                <p className="font-semibold">${boat.price.toLocaleString()}/day</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {boat.features.slice(0, 3).map((feature, index) => (
-                    <span 
-                      key={index}
-                      className="bg-gray-100 px-2 py-1 rounded-full text-xs"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                  {boat.features.length > 3 && (
-                    <span className="text-xs text-gray-500">
-                      +{boat.features.length - 3} more
-                    </span>
-                  )}
+              <h2 className="text-xl font-semibold mb-2">{boat.name}</h2>
+              <p className="text-gray-600 mb-2">{boat.location}</p>
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="text-sm text-gray-500">Starting from</p>
+                  <p className="text-lg font-bold text-blue-600">{boat.rate4hr}</p>
                 </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openModal(boat);
+                  }}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+                >
+                  View Details
+                </button>
               </div>
-              <button 
-                onClick={() => openModal(boat)}
-                className="mt-4 w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition-colors"
-              >
-                View Details
-              </button>
             </div>
           </div>
         ))}
@@ -215,16 +155,6 @@ const BoatsPage = () => {
       {isModalOpen && selectedBoat && (
         <BoatDetailsModal boat={selectedBoat} onClose={closeModal} />
       )}
-
-      <style jsx>{`
-        @keyframes skeleton {
-          0% { background-color: #f0f0f0; }
-          50% { background-color: #ddd; }
-          100% { background-color: #f0f0f0; }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default BoatsPage;
+}
