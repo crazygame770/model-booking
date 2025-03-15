@@ -2,20 +2,10 @@ import React from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Villa } from '@/data/villas';
 
 interface VillaDetailsModalProps {
-  villa: { 
-    id: number; 
-    name: string; 
-    imageUrls: string[];
-    location: string;
-    isWaterfront: boolean;
-    price: number;
-    tax: number;
-    exitCleaningFee: number;
-    securityDeposit: number;
-    minStayWeeks: number;
-  };
+  villa: Villa;
   onClose: () => void;
 }
 
@@ -60,15 +50,12 @@ const VillaDetailsModal: React.FC<VillaDetailsModalProps> = ({ villa, onClose })
         
         {/* Image Slider */}
         <Slider {...settings}>
-          {villa.imageUrls.map((_, index) => (
+          {villa.images.map((image, index) => (
             <div key={index}>
-              <div
-                style={{
-                  width: '100%',
-                  height: '400px',
-                  backgroundColor: '#f0f0f0',
-                  animation: 'skeleton 1.5s infinite linear',
-                }}
+              <img
+                src={image}
+                alt={`${villa.name} - View ${index + 1}`}
+                className="w-full h-[400px] object-cover"
               />
             </div>
           ))}
@@ -112,14 +99,6 @@ const VillaDetailsModal: React.FC<VillaDetailsModalProps> = ({ villa, onClose })
             Book Now
           </button>
         </div>
-
-        <style jsx>{`
-          @keyframes skeleton {
-            0% { background-color: #f0f0f0; }
-            50% { background-color: #ddd; }
-            100% { background-color: #f0f0f0; }
-          }
-        `}</style>
       </div>
     </div>
   );
