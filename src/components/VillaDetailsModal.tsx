@@ -9,10 +9,12 @@ interface VillaDetailsModalProps {
     name: string; 
     imageUrls: string[];
     location: string;
-    bedrooms: number;
-    bathrooms: number;
+    isWaterfront: boolean;
     price: number;
-    amenities: string[];
+    tax: number;
+    exitCleaningFee: number;
+    securityDeposit: number;
+    minStayWeeks: number;
   };
   onClose: () => void;
 }
@@ -73,36 +75,26 @@ const VillaDetailsModal: React.FC<VillaDetailsModalProps> = ({ villa, onClose })
         </Slider>
 
         <div className="mt-6 space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <h3 className="font-semibold">Location</h3>
-              <p>{villa.location}</p>
+              <p>
+                {villa.isWaterfront && <span className="text-blue-500">Waterfront - </span>}
+                {villa.location}
+              </p>
             </div>
             <div>
               <h3 className="font-semibold">Price</h3>
-              <p>${villa.price.toLocaleString()} per night</p>
+              <p>${villa.price.toLocaleString()} per night + {villa.tax}% tax</p>
             </div>
             <div>
-              <h3 className="font-semibold">Bedrooms</h3>
-              <p>{villa.bedrooms}</p>
+              <h3 className="font-semibold">Minimum Stay</h3>
+              <p>{villa.minStayWeeks} week minimum</p>
             </div>
             <div>
-              <h3 className="font-semibold">Bathrooms</h3>
-              <p>{villa.bathrooms}</p>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-2">Amenities</h3>
-            <div className="flex flex-wrap gap-2">
-              {villa.amenities.map((amenity, index) => (
-                <span 
-                  key={index}
-                  className="bg-gray-100 px-3 py-1 rounded-full text-sm"
-                >
-                  {amenity}
-                </span>
-              ))}
+              <h3 className="font-semibold">Additional Fees</h3>
+              <p>${villa.exitCleaningFee.toLocaleString()} exit cleaning</p>
+              <p>${villa.securityDeposit.toLocaleString()} security deposit</p>
             </div>
           </div>
         </div>

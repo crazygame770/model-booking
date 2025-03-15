@@ -8,10 +8,12 @@ interface Villa {
   name: string;
   imageUrls: string[];
   location: string;
-  bedrooms: number;
-  bathrooms: number;
+  isWaterfront: boolean;
   price: number;
-  amenities: string[];
+  tax: number;
+  exitCleaningFee: number;
+  securityDeposit: number;
+  minStayWeeks: number;
 }
 
 // Seeded random number generator
@@ -37,42 +39,23 @@ const locations = [
   'Fort Lauderdale, FL'
 ];
 
-const amenities = [
-  'Pool',
-  'Beach Access',
-  'Gym',
-  'Spa',
-  'Tennis Court',
-  'Private Garden',
-  'Ocean View',
-  'Smart Home',
-  'Wine Cellar',
-  'Home Theater',
-  'Private Chef',
-  'Security System'
-];
-
 const VillasPage = () => {
   // Generate 100 mockup villas with consistent data using seed
   const villas: Villa[] = useMemo(() => {
     const random = new SeededRandom(54321); // Different seed from models
 
     return Array.from({ length: 100 }, (_, i) => {
-      const numAmenities = Math.floor(4 + random.next() * 5); // 4-8 amenities
-      const villaAmenities = new Set<string>();
-      while (villaAmenities.size < numAmenities) {
-        villaAmenities.add(amenities[Math.floor(random.next() * amenities.length)]);
-      }
-
       return {
         id: i + 1,
-        name: `Luxury Villa ${i + 1}`,
+        name: `Villa ${i + 1}`,
         imageUrls: ['', '', '', ''], // Placeholder for images
         location: locations[Math.floor(random.next() * locations.length)],
-        bedrooms: Math.floor(3 + random.next() * 8), // 3-10 bedrooms
-        bathrooms: Math.floor(3 + random.next() * 8), // 3-10 bathrooms
-        price: Math.floor(1000 + random.next() * 9000), // $1000-$10000 per night
-        amenities: Array.from(villaAmenities)
+        isWaterfront: random.next() > 0.5,
+        price: Math.floor(8000 + random.next() * 4500), // $8000-$12500 per night
+        tax: 14, // 14% tax
+        exitCleaningFee: 500,
+        securityDeposit: 20000,
+        minStayWeeks: 1
       };
     });
   }, []); // Empty dependency array ensures this only runs once
@@ -122,24 +105,13 @@ const VillasPage = () => {
             <div className="p-4">
               <h3 className="text-lg font-semibold mb-2">{villa.name}</h3>
               <div className="text-sm text-gray-600 space-y-1">
-                <p>Location: {villa.location}</p>
-                <p>{villa.bedrooms} Bedrooms • {villa.bathrooms} Bathrooms</p>
-                <p className="font-semibold">${villa.price.toLocaleString()}/night</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {villa.amenities.slice(0, 3).map((amenity, index) => (
-                    <span 
-                      key={index}
-                      className="bg-gray-100 px-2 py-1 rounded-full text-xs"
-                    >
-                      {amenity}
-                    </span>
-                  ))}
-                  {villa.amenities.length > 3 && (
-                    <span className="text-xs text-gray-500">
-                      +{villa.amenities.length - 3} more
-                    </span>
-                  )}
-                </div>
+                <p>
+                  {villa.isWaterfront && <span className="text-blue-500">Waterfront - </span>}
+                  {villa.location}
+                </p>
+                <p className="font-semibold">${villa.price.toLocaleString()} per night + {villa.tax}% tax</p>
+                <p>{villa.minStayWeeks} week minimum</p>
+                <p>${villa.exitCleaningFee.toLocaleString()} exit cleaning / ${villa.securityDeposit.toLocaleString()} security deposit</p>
               </div>
               <button 
                 onClick={() => openModal(villa)}
