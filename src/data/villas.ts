@@ -23,6 +23,14 @@ export const villas: Villa[] = [
     images: [
       '/images/villas/Sabal1.jpg',
       '/images/villas/Sabal2.jpg',
+      '/images/villas/Sabal3.jpg',
+      '/images/villas/Sabal4.jpg',
+      '/images/villas/Sabal5.jpg',
+      '/images/villas/Sabal6.jpg',
+      '/images/villas/Sabal7.jpg',
+      '/images/villas/Sabal8.jpg',
+      '/images/villas/Sabal9.jpg',
+      '/images/villas/Sabal10.jpg',
     ]
   },
   {
