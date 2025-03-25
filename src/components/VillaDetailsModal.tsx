@@ -72,7 +72,7 @@ const VillaDetailsModal: React.FC<VillaDetailsModalProps> = ({ villa, onClose })
             </div>
             <div>
               <h3 className="font-semibold">Price</h3>
-              <p>${villa.price.toLocaleString()} per night + {villa.tax}% tax</p>
+              <p>${villa.price?.toLocaleString()} per night + {villa.tax}% tax</p>
             </div>
             <div>
               <h3 className="font-semibold">Minimum Stay</h3>
@@ -80,8 +80,8 @@ const VillaDetailsModal: React.FC<VillaDetailsModalProps> = ({ villa, onClose })
             </div>
             <div>
               <h3 className="font-semibold">Additional Fees</h3>
-              <p>${villa.exitCleaningFee.toLocaleString()} exit cleaning</p>
-              <p>${villa.securityDeposit.toLocaleString()} security deposit</p>
+              <p>${villa.exitCleaningFee?.toLocaleString()} exit cleaning</p>
+              <p>${villa.securityDeposit?.toLocaleString()} security deposit</p>
             </div>
           </div>
         </div>
